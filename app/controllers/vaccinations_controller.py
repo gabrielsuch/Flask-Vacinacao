@@ -29,17 +29,16 @@ def post_vaccination_controller():
         data = request.get_json()
 
         keys = ["cpf", "name", "vaccine_name", "health_unit_name"]
-
-        missing_keys = []
-        wrong_keys = []
         
+        missing_keys = []
+
+        for i in list(data.keys()):
+            if(i not in keys):
+                del data[i]
+
         for i in keys:
             if(i not in data.keys()):
                 missing_keys.append(i)
-
-        for i in data.keys():
-            if(i not in keys):
-                wrong_keys.append(i)
 
 
         for i in data.values():
@@ -69,6 +68,7 @@ def post_vaccination_controller():
         else:
             return {"error": "CPF field must be numbers only"}, 400
 
+        print(send_data)
         current_app.db.session.add(send_data)
         current_app.db.session.commit()
 
@@ -81,8 +81,7 @@ def post_vaccination_controller():
     except TypeError:
         return {
             "error": "Wrong field name",
-            "missing_keys": missing_keys,
-            "wrong_keys": wrong_keys
+            "missing_keys": missing_keys
         }, 400
     
     except IntegrityError:
