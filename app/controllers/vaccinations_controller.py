@@ -30,18 +30,35 @@ def post_vaccination_controller():
 
         keys = ["cpf", "name", "vaccine_name", "health_unit_name"]
 
+        missing_keys = []
+        wrong_keys = []
+        
+        for i in keys:
+            if(i not in data.keys()):
+                missing_keys.append(i)
+
+        for i in data.keys():
+            if(i not in keys):
+                wrong_keys.append(i)
+
+
         for i in data.values():
             if(type(i) != str):
                 return {"error": "Only String is accepted"}, 400
 
         if(len(data.keys())) < len(keys):
-            return {"error": "Missing fields"}, 400
+            return {
+                "error": "Missing fields",
+                "missing_keys": missing_keys
+            }, 400
 
         if(len(data["cpf"]) < 11):
             return {"error": "CPF must have 11 numbers"}, 400
 
         if(data["cpf"].isnumeric()):
             send_data = Vaccination(**data)
+
+            print(send_data.__dict__)
 
             send_data.first_shot_date = datetime.datetime.now()
 
@@ -52,10 +69,6 @@ def post_vaccination_controller():
         else:
             return {"error": "CPF field must be numbers only"}, 400
 
-    except TypeError:
-        return {"error": "Wrong field name"}, 400
-
-    try:
         current_app.db.session.add(send_data)
         current_app.db.session.commit()
 
@@ -64,6 +77,13 @@ def post_vaccination_controller():
         send_data.__dict__.pop("_sa_instance_state")
 
         return jsonify(send_data.__dict__), 201
+
+    except TypeError:
+        return {
+            "error": "Wrong field name",
+            "missing_keys": missing_keys,
+            "wrong_keys": wrong_keys
+        }, 400
     
     except IntegrityError:
         return {"error": "CPF already exists"}, 409 
