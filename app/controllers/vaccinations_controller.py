@@ -2,8 +2,6 @@ from app.models.vaccination_models import Vaccination
 from flask import request, current_app, jsonify
 import datetime
 from sqlalchemy.exc import IntegrityError, DataError
-from sqlalchemy.orm import Query
-from app.configs.database import db
 
 
 def get_vaccination_controller():
