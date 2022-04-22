@@ -1,6 +1,6 @@
 # Vacinação
 
-### Link da API: https://vacinacao-deploy.herokuapp.com/vaccinations
+### Link da API: https://vacinacao-deploy.herokuapp.com/
 #
 
 ### Para capturar os dados (GET) deve se usar a seguinte url: https://vacinacao-deploy.herokuapp.com/vaccinations
