@@ -17,12 +17,36 @@
 ### Link da API: https://vacinacao-deploy.herokuapp.com/
 #
 
-### Para capturar os dados (GET) deve se usar a seguinte url: https://vacinacao-deploy.herokuapp.com/vaccinations
+## GET /vaccinations - Formato da Requisição
+
+```json
+No body
+```
+
+### Status 200 - OK:
+```json
+[
+	{
+		"cpf": "11111111112",
+		"name": "Joao",
+		"first_shot_date": "28/09/2011",
+		"vaccine_name": "Pfizer",
+		"health_unit_name": "Hospital"
+	},
+	{
+		"cpf": "22222222222",
+		"name": "Ricardo",
+		"first_shot_date": "15/05/2021",
+		"vaccine_name": "Johnson",
+		"health_unit_name": "Hospital"
+	}
+]
+```
+
 #
 
-### Para inserir algum dado (POST) deve se usar a seguinte url: https://vacinacao-deploy.herokuapp.com/vaccinations
-
-```
+## POST /vaccinations - Formato da Requisição
+```json
 {
 	"cpf": "11111111112",
 	"name": "Joao",
@@ -32,9 +56,8 @@
 }
 ```
 
-### Ao inserir estes dados, será retornado o Status Code 201, e seus respectivos dados criados: 
-
-```
+### Status 201 - Created:
+```json
 {
 	"cpf": "11111111112",
 	"first_shot_date": "Fri, 22 Apr 2022 01:19:01 GMT",
@@ -45,24 +68,19 @@
 }
 ``` 
 
-### Caso esquecer algum dado como o exemplo abaixo:
-
-```
-{
-	"cpf": "11111111113",
-	"first_shot_date": "28/09/2011",
-	"vaccine_name": "Pfizer",
-	"health_unit_name": "Hospital"
-}
-```
-
-### Será retornado o Status Code 400, e a seguinte mensagem:
-
-```
+### Status 400 - Bad Request:
+```json
 {
 	"error": "Missing fields",
 	"missing_keys": [
 		"name"
 	]
+}
+```
+
+### Status 409 - Conflict:
+```json
+{
+	"error": "CPF already exists"
 }
 ```
